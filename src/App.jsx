@@ -10,7 +10,7 @@ import {
   IonTabs,
 } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
-import { ellipse, triangle, settingsSharp } from 'ionicons/icons';
+import { ellipse, settingsSharp } from 'ionicons/icons';
 
 import { connect } from 'react-redux';
 
