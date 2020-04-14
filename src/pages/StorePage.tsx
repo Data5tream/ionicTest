@@ -32,9 +32,20 @@ const StorePage: React.FC<StorePageProps> = ({ store }) => (
   </IonPage>
 );
 
-const mapStateToProps: any = (state: any, ownProps: any) => ({
-  store: state.stores[ownProps.match.params.id],
-});
+const mapStateToProps: any = (state: any, ownProps: any) => {
+  if (ownProps.match.params.id < state.stores.length) {
+    return {
+      store: state.stores[ownProps.match.params.id],
+    };
+  } else {
+    return {
+      store: {
+        name: 'Undefined',
+        entries: [],
+      },
+    };
+  }
+};
 
 const mapDispatchToProps: any = (dispatch: any) => ({
   toogleForceDarkmode: (value: boolean) => dispatch({ type: 'SET_FORCE_DARKMODE', value }),
