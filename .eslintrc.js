@@ -13,6 +13,7 @@ module.exports = {
   plugins: ['@ionic', 'react'],
   extends: ['plugin:@ionic/strict', 'plugin:react/recommended'],
   rules: {
-    'sort-imports': 0
+    'sort-imports': 0,
+    'function-paren-newline': 1
   }
 };
