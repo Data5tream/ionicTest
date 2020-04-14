@@ -19,7 +19,7 @@ const Config = ({forceDarkmode, stores, toogleForceDarkmode}) => {
         <IonList>
           <IonItem>
             <IonLabel>Force DarkMode</IonLabel>
-            <IonToggle slot="end" checked={forceDarkmode} onClick={() => { toogleForceDarkmode(!forceDarkmode); }}></IonToggle>
+            <IonToggle slot="end" checked={forceDarkmode} onIonChange={() => { toogleForceDarkmode(!forceDarkmode); }}></IonToggle>
           </IonItem>
         </IonList>
       </IonContent>
