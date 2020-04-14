@@ -15,6 +15,7 @@ module.exports = {
   rules: {
     'sort-imports': 0,
     'function-paren-newline': 1,
-    '@typescript-eslint/no-explicit-any': 1
+    '@typescript-eslint/no-explicit-any': 1,
+    '@typescript-eslint/explicit-function-return-type': 1
   }
 };
