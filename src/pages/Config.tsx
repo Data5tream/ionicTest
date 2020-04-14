@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 
 import { connect } from 'react-redux';
 
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonList, IonItem, IonLabel, IonToggle, IonItemDivider, IonReorderGroup, IonReorder, IonFab, IonFabButton, IonIcon, IonModal, IonInput, IonCard, IonCardHeader, IonCardTitle, IonCardContent, IonBackdrop, IonButton, IonGrid, IonRow, IonCol } from '@ionic/react';
+import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonList, IonItem, IonLabel, IonToggle, IonItemDivider, IonReorderGroup, IonReorder, IonFab, IonFabButton, IonIcon, IonModal, IonInput, IonCard, IonCardHeader, IonCardTitle, IonCardContent, IonButton, IonGrid, IonRow, IonCol } from '@ionic/react';
 import { ItemReorderEventDetail } from '@ionic/core';
 import { addOutline } from 'ionicons/icons';
 
