@@ -4,7 +4,17 @@ import { connect } from 'react-redux';
 
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonList, IonItem, IonLabel, IonCheckbox } from '@ionic/react';
 
-const StorePage = ({ store }) => (
+interface StorePageProps {
+  store: {
+    name: string;
+    entries: Array<{
+      name: string;
+      done: boolean;
+    }>;
+  };
+}
+
+const StorePage: React.FC<StorePageProps> = ({ store }) => (
   <IonPage>
     <IonHeader>
       <IonToolbar>
@@ -22,12 +32,12 @@ const StorePage = ({ store }) => (
   </IonPage>
 );
 
-const mapStateToProps = (state, ownProps) => ({
+const mapStateToProps: any = (state: any, ownProps: any) => ({
   store: state.stores[ownProps.match.params.id],
 });
 
-const mapDispatchToProps = dispatch => ({
-  toogleForceDarkmode: value => dispatch({ type: 'SET_FORCE_DARKMODE', value }),
+const mapDispatchToProps: any = (dispatch: any) => ({
+  toogleForceDarkmode: (value: boolean) => dispatch({ type: 'SET_FORCE_DARKMODE', value }),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(StorePage);
