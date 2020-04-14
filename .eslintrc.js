@@ -14,6 +14,7 @@ module.exports = {
   extends: ['plugin:@ionic/strict', 'plugin:react/recommended'],
   rules: {
     'sort-imports': 0,
-    'function-paren-newline': 1
+    'function-paren-newline': 1,
+    '@typescript-eslint/no-explicit-any': 1
   }
 };

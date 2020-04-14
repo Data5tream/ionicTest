@@ -12,6 +12,8 @@ import {
 import { IonReactRouter } from '@ionic/react-router';
 import { ellipse, square, triangle } from 'ionicons/icons';
 
+import { connect } from 'react-redux';
+
 import Tab1 from './pages/Tab1';
 import Tab2 from './pages/Tab2';
 import Tab3 from './pages/Tab3';
@@ -35,7 +37,7 @@ import '@ionic/react/css/display.css';
 /* Theme variables */
 import './theme/variables.css';
 
-const App: React.FC = () => (
+const App = ({ forceDarkmode, stores }) => (
   <IonApp>
     <IonReactRouter>
       <IonTabs>
@@ -52,7 +54,7 @@ const App: React.FC = () => (
           </IonTabButton>
           <IonTabButton tab="tab2" href="/tab2">
             <IonIcon icon={ellipse} />
-            <IonLabel>Tab 2</IonLabel>
+            <IonLabel>Tab 2 {forceDarkmode}</IonLabel>
           </IonTabButton>
           <IonTabButton tab="tab3" href="/tab3">
             <IonIcon icon={square} />
@@ -64,4 +66,9 @@ const App: React.FC = () => (
   </IonApp>
 );
 
-export default App;
+const mapStateToProps = state => {
+  const { forceDarkmode, stores } = state;
+  return { forceDarkmode };
+};
+
+export default connect(mapStateToProps)(App);
