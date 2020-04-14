@@ -4,9 +4,7 @@ import { connect } from 'react-redux';
 
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonList, IonItem, IonLabel, IonToggle } from '@ionic/react';
 
-import './Tab1.css';
-
-const Config = ({forceDarkmode, stores, toogleForceDarkmode}) => {
+const Config = ({ forceDarkmode, stores, toogleForceDarkmode }) => {
 
   return (
     <IonPage>

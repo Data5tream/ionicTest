@@ -1,6 +1,11 @@
 const initialState = {
   forceDarkmode: false,
-  stores: [],
+  stores: [
+    {
+      name: 'Default',
+      entries: [],
+    },
+  ],
 };
 
 const listApp: any = (state = initialState, action: {type: string; value: unknown;}) => {

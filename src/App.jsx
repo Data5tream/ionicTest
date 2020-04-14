@@ -14,10 +14,8 @@ import { ellipse, triangle, settingsSharp } from 'ionicons/icons';
 
 import { connect } from 'react-redux';
 
-import Tab1 from './pages/Tab1';
-import Tab2 from './pages/Tab2';
-import Tab3 from './pages/Tab3';
 import Config from './pages/Config';
+import StorePage from './pages/StorePage';
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -46,21 +44,15 @@ const App = ({ forceDarkmode, stores }) => {
       <IonReactRouter>
         <IonTabs>
           <IonRouterOutlet>
-            <Route path="/tab1" component={Tab1} exact={true} />
-            <Route path="/tab2" component={Tab2} exact={true} />
-            <Route path="/tab3" component={Tab3} />
+            <Route path="/store/:id" component={StorePage} />
             <Route path="/configuration" component={Config} exact={true} />
-            <Route path="/" render={() => <Redirect to="/tab1" />} exact={true} />
+            <Route path="/" render={() => <Redirect to="/store/0" />} exact={true} />
           </IonRouterOutlet>
           <IonTabBar slot="bottom">
-            <IonTabButton tab="tab1" href="/tab1">
-              <IonIcon icon={triangle} />
-              <IonLabel>Tab 1</IonLabel>
-            </IonTabButton>
-            <IonTabButton tab="tab2" href="/tab2">
+            {stores.map((store, id) => <IonTabButton key={id} tab="store" href={`/store/${id}`}>
               <IonIcon icon={ellipse} />
-              <IonLabel>Tab 2 {forceDarkmode}</IonLabel>
-            </IonTabButton>
+              <IonLabel>{store.name}</IonLabel>
+            </IonTabButton>)}
             <IonTabButton tab="configuration" href="/configuration">
               <IonIcon icon={settingsSharp} />
               <IonLabel>Settings</IonLabel>
