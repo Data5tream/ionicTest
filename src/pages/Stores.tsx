@@ -31,7 +31,7 @@ const StorePage: React.FC<StorePageProps> = ({ stores, id, basePath, setRoute })
 
   useEffect(() => {
     setRoute(loc.pathname);
-  }, [loc]);
+  }, [loc, setRoute]);
 
   const sliderOptions = {
     on: {

@@ -25,7 +25,7 @@ const Config: React.FC<ConfigProps> = ({ forceDarkmode, stores, toogleForceDarkm
 
   useEffect(() => {
     setRoute(loc.pathname);
-  }, [loc]);
+  }, [loc, setRoute]);
 
   const toggleDarkmode: Function = () => {
     toogleForceDarkmode(!forceDarkmode);
@@ -53,7 +53,7 @@ const Config: React.FC<ConfigProps> = ({ forceDarkmode, stores, toogleForceDarkm
         <IonList>
           <IonItem>
             <IonLabel>Force DarkMode</IonLabel>
-            <IonToggle slot="end" checked={forceDarkmode} onIonChange={() => toggleDarkmode}></IonToggle>
+            <IonToggle slot="end" checked={forceDarkmode} onIonChange={() => toggleDarkmode()}></IonToggle>
           </IonItem>
           <IonItemDivider>
             <IonLabel>Stores</IonLabel>
