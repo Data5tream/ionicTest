@@ -2,7 +2,9 @@ import React, { useState, useEffect } from 'react';
 
 import { connect } from 'react-redux';
 
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonList, IonItem, IonLabel, IonCheckbox, IonSlides, IonSlide, IonCard, IonCardContent } from '@ionic/react';
+import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonSlides, IonSlide } from '@ionic/react';
+
+import StoreList from '../components/StoreList';
 
 interface StorePageProps {
   stores: [{
@@ -44,16 +46,7 @@ const StorePage: React.FC<StorePageProps> = ({ stores }) => {
         <IonSlides options={sliderOptions} style={{ height: '100%' }} pager={(stores.length < 0)}>
           {stores.map(store => (
             <IonSlide key={store.name} style={{ background: store.color }}>
-              <IonCard style={{ width: '100%' }}>
-                <IonCardContent>
-                  <IonList>
-                    {store.entries.map((entry, id) => <IonItem key={id}>
-                      <IonLabel>{entry.name}</IonLabel>
-                      <IonCheckbox checked={entry.done} />
-                    </IonItem>)}
-                  </IonList>
-                </IonCardContent>
-              </IonCard>
+              <StoreList store={store} />
             </IonSlide>
           ))}
         </IonSlides>
