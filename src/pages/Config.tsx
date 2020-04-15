@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 
 import { connect } from 'react-redux';
 
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonList, IonItem, IonLabel, IonToggle, IonItemDivider, IonReorderGroup, IonReorder, IonFab, IonFabButton, IonIcon, IonModal, IonInput, IonCard, IonCardHeader, IonCardTitle, IonCardContent, IonButton, IonGrid, IonRow, IonCol } from '@ionic/react';
+import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonList, IonItem, IonLabel, IonToggle, IonItemDivider, IonReorderGroup, IonReorder, IonFab, IonFabButton, IonIcon, IonModal, IonInput, IonCard, IonCardHeader, IonCardTitle, IonCardContent, IonButton, IonGrid, IonRow, IonCol, IonMenuButton } from '@ionic/react';
 import { ItemReorderEventDetail } from '@ionic/core';
 import { addOutline } from 'ionicons/icons';
 
@@ -37,6 +37,7 @@ const Config: React.FC<ConfigProps> = ({ forceDarkmode, stores, toogleForceDarkm
     <IonPage>
       <IonHeader>
         <IonToolbar>
+          <IonMenuButton menu="start" slot="start" />
           <IonTitle>Settings</IonTitle>
         </IonToolbar>
       </IonHeader>

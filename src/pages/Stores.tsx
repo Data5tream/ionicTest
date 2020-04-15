@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 
 import { connect } from 'react-redux';
 
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonSlides, IonSlide } from '@ionic/react';
+import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonSlides, IonSlide, IonMenuButton } from '@ionic/react';
 
 import StoreList from '../components/StoreList';
 
@@ -15,14 +15,21 @@ interface StorePageProps {
       done: boolean;
     }>;
   }];
+  id: number;
 }
 
-const StorePage: React.FC<StorePageProps> = ({ stores }) => {
+const StorePage: React.FC<StorePageProps> = ({ stores, id }) => {
   const [currentTitle, setCurrentTitle] = useState(stores[0].name);
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [slider, setSlider] = useState<any>();
 
   const sliderOptions = {
     on: {
+      beforeInit(): void {
+        // eslint-disable-next-line @typescript-eslint/no-this-alias
+        const slider: any = this;
+        setSlider(slider);
+      },
       slideChange(): void {
         // eslint-disable-next-line @typescript-eslint/no-this-alias
         const slider: any = this;
@@ -32,13 +39,23 @@ const StorePage: React.FC<StorePageProps> = ({ stores }) => {
   };
 
   useEffect(() => {
-    setCurrentTitle(stores[currentSlide].name);
-  }, [currentSlide]);
+    if (stores.length > currentSlide) {
+      setCurrentTitle(stores[currentSlide].name);
+      if (slider && currentSlide !== slider.activeIndex) {
+        slider.slideTo(currentSlide);
+      }
+    }
+  }, [currentSlide, stores, slider]);
+
+  useEffect(() => {
+    setCurrentSlide(id);
+  }, [id]);
 
   return (
     <IonPage>
       <IonHeader>
         <IonToolbar>
+          <IonMenuButton menu="start" slot="start" />
           <IonTitle>{currentTitle}</IonTitle>
         </IonToolbar>
       </IonHeader>
@@ -54,6 +71,8 @@ const StorePage: React.FC<StorePageProps> = ({ stores }) => {
     </IonPage>);
 };
 
-const mapStateToProps: any = (state: any, ownProps: any) => ({ stores: state.stores });
+const mapStateToProps: any = (state: any, ownProps: any) => (
+  { stores: state.stores, id: ownProps.match.params.id }
+);
 
 export default connect(mapStateToProps)(StorePage);

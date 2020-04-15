@@ -5,9 +5,13 @@ import {
   IonIcon,
   IonLabel,
   IonRouterOutlet,
-  IonTabBar,
-  IonTabButton,
-  IonTabs,
+  IonMenu,
+  IonHeader,
+  IonTitle,
+  IonContent,
+  IonList,
+  IonItem,
+  IonToolbar,
 } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
 import { ellipse, settingsSharp } from 'ionicons/icons';
@@ -15,7 +19,7 @@ import { ellipse, settingsSharp } from 'ionicons/icons';
 import { connect } from 'react-redux';
 
 import Config from './pages/Config';
-import StorePage from './pages/StorePage';
+import Stores from './pages/Stores';
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -47,23 +51,32 @@ const App: React.FC<AppProps> = ({ forceDarkmode, stores }) => {
   return (
     <IonApp>
       <IonReactRouter>
-        <IonTabs>
-          <IonRouterOutlet>
-            <Route path="/store/:id" component={StorePage} />
-            <Route path="/configuration" component={Config} exact={true} />
-            <Route path="/" render={() => <Redirect to="/store/0" />} exact={true} />
-          </IonRouterOutlet>
-          <IonTabBar slot="bottom">
-            {stores.map((store: {name: string;}, id: number) => <IonTabButton key={id} tab="store" href={`/store/${id}`}>
-              <IonIcon icon={ellipse} />
-              <IonLabel>{store.name}</IonLabel>
-            </IonTabButton>)}
-            <IonTabButton tab="configuration" href="/configuration">
-              <IonIcon icon={settingsSharp} />
-              <IonLabel>Settings</IonLabel>
-            </IonTabButton>
-          </IonTabBar>
-        </IonTabs>
+        <IonMenu contentId="main" side="start">
+          <IonHeader>
+            <IonToolbar color="primary">
+              <IonTitle>Shopping Lists</IonTitle>
+            </IonToolbar>
+          </IonHeader>
+          <IonContent>
+            <IonList>
+              {stores.map((store: {name: string;}, id: number) => (
+                <IonItem routerLink={`/store/${id}`} key={id}>
+                  <IonIcon icon={ellipse} />
+                  <IonLabel>{store.name}</IonLabel>
+                </IonItem>
+              ))}
+              <IonItem routerLink="/configuration">
+                <IonIcon icon={settingsSharp} />
+                <IonLabel>Settings</IonLabel>
+              </IonItem>
+            </IonList>
+          </IonContent>
+        </IonMenu>
+        <IonRouterOutlet id="main">
+          <Route path="/store/:id" component={Stores} />
+          <Route path="/configuration" component={Config} exact={true} />
+          <Route path="/" render={() => <Redirect to="/store/0" />} exact={true} />
+        </IonRouterOutlet>
       </IonReactRouter>
     </IonApp>
   );
