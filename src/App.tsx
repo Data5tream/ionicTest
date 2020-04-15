@@ -12,6 +12,7 @@ import {
   IonList,
   IonItem,
   IonToolbar,
+  IonMenuToggle,
 } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
 import { pricetag, settingsSharp } from 'ionicons/icons';
@@ -61,18 +62,20 @@ const App: React.FC<AppProps> = ({ forceDarkmode, stores, route }) => {
             </IonToolbar>
           </IonHeader>
           <IonContent>
-            <IonList>
-              {stores.map((store: {name: string;}, id: number) => (
-                <IonItem routerLink={`/store/${id}`} key={id} color={checkColor(`/store/${id}`)}>
-                  <IonIcon icon={pricetag} slot="start" />
-                  <IonLabel>{store.name}</IonLabel>
+            <IonMenuToggle>
+              <IonList>
+                {stores.map((store: {name: string;}, id: number) => (
+                  <IonItem routerLink={`/store/${id}`} key={id} color={checkColor(`/store/${id}`)}>
+                    <IonIcon icon={pricetag} slot="start" />
+                    <IonLabel>{store.name}</IonLabel>
+                  </IonItem>
+                ))}
+                <IonItem routerLink="/configuration" color={checkColor('/configuration')}>
+                  <IonIcon icon={settingsSharp} slot="start" />
+                  <IonLabel>Settings</IonLabel>
                 </IonItem>
-              ))}
-              <IonItem routerLink="/configuration" color={checkColor('/configuration')}>
-                <IonIcon icon={settingsSharp} slot="start" />
-                <IonLabel>Settings</IonLabel>
-              </IonItem>
-            </IonList>
+              </IonList>
+            </IonMenuToggle>
           </IonContent>
         </IonMenu>
         <IonRouterOutlet id="main">
