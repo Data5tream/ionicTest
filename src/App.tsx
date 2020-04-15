@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Redirect, Route, useLocation } from 'react-router-dom';
+import React from 'react';
+import { Redirect, Route } from 'react-router-dom';
 import {
   IonApp,
   IonIcon,
@@ -14,7 +14,7 @@ import {
   IonToolbar,
 } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
-import { ellipse, settingsSharp } from 'ionicons/icons';
+import { pricetag, settingsSharp } from 'ionicons/icons';
 
 import { connect } from 'react-redux';
 
@@ -49,7 +49,7 @@ interface AppProps {
 const App: React.FC<AppProps> = ({ forceDarkmode, stores, route }) => {
   document.body.classList.toggle('dark', forceDarkmode || window.matchMedia('(prefers-color-scheme: dark)').matches);
 
-  const checkColor = (routes: string) => routes === route ? 'primary' : '';
+  const checkColor = (routes: string) => routes === route ? 'tertiary' : '';
 
   return (
     <IonApp>
@@ -64,12 +64,12 @@ const App: React.FC<AppProps> = ({ forceDarkmode, stores, route }) => {
             <IonList>
               {stores.map((store: {name: string;}, id: number) => (
                 <IonItem routerLink={`/store/${id}`} key={id} color={checkColor(`/store/${id}`)}>
-                  <IonIcon icon={ellipse} />
+                  <IonIcon icon={pricetag} slot="start" />
                   <IonLabel>{store.name}</IonLabel>
                 </IonItem>
               ))}
               <IonItem routerLink="/configuration" color={checkColor('/configuration')}>
-                <IonIcon icon={settingsSharp} />
+                <IonIcon icon={settingsSharp} slot="start" />
                 <IonLabel>Settings</IonLabel>
               </IonItem>
             </IonList>
