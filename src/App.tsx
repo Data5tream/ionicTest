@@ -1,5 +1,5 @@
-import React from 'react';
-import { Redirect, Route } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Redirect, Route, useLocation } from 'react-router-dom';
 import {
   IonApp,
   IonIcon,
@@ -43,10 +43,13 @@ import './theme/variables.css';
 interface AppProps {
   forceDarkmode: boolean;
   stores: Array<{name: string;}>;
+  route: string;
 }
 
-const App: React.FC<AppProps> = ({ forceDarkmode, stores }) => {
+const App: React.FC<AppProps> = ({ forceDarkmode, stores, route }) => {
   document.body.classList.toggle('dark', forceDarkmode || window.matchMedia('(prefers-color-scheme: dark)').matches);
+
+  const checkColor = (routes: string) => routes === route ? 'primary' : '';
 
   return (
     <IonApp>
@@ -60,12 +63,12 @@ const App: React.FC<AppProps> = ({ forceDarkmode, stores }) => {
           <IonContent>
             <IonList>
               {stores.map((store: {name: string;}, id: number) => (
-                <IonItem routerLink={`/store/${id}`} key={id}>
+                <IonItem routerLink={`/store/${id}`} key={id} color={checkColor(`/store/${id}`)}>
                   <IonIcon icon={ellipse} />
                   <IonLabel>{store.name}</IonLabel>
                 </IonItem>
               ))}
-              <IonItem routerLink="/configuration">
+              <IonItem routerLink="/configuration" color={checkColor('/configuration')}>
                 <IonIcon icon={settingsSharp} />
                 <IonLabel>Settings</IonLabel>
               </IonItem>
@@ -82,9 +85,6 @@ const App: React.FC<AppProps> = ({ forceDarkmode, stores }) => {
   );
 };
 
-const mapStateToProps: any = (state: any) => {
-  const { forceDarkmode, stores } = state;
-  return { forceDarkmode, stores };
-};
+const mapStateToProps: any = (state: any) => state;
 
 export default connect<AppProps>(mapStateToProps)(App);
