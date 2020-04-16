@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonSlides, IonSlide, IonMenuButton } from '@ionic/react';
 
 import StoreList from '../components/StoreList';
-import { useLocation, useHistory } from 'react-router';
+import { useHistory } from 'react-router';
 
 interface StorePageProps {
   stores: [{
@@ -18,20 +18,14 @@ interface StorePageProps {
   }];
   id: number;
   basePath: string;
-  setRoute: Function;
 }
 
-const StorePage: React.FC<StorePageProps> = ({ stores, id, basePath, setRoute }) => {
+const StorePage: React.FC<StorePageProps> = ({ stores, id, basePath }) => {
   const [currentTitle, setCurrentTitle] = useState(stores[0].name);
   const [currentSlide, setCurrentSlide] = useState(0);
   const [slider, setSlider] = useState<any>();
 
-  const loc = useLocation();
   const his = useHistory();
-
-  useEffect(() => {
-    setRoute(loc.pathname);
-  }, [loc, setRoute]);
 
   const sliderOptions = {
     on: {
@@ -85,8 +79,5 @@ const StorePage: React.FC<StorePageProps> = ({ stores, id, basePath, setRoute })
 const mapStateToProps: any = (state: any, ownProps: any) => (
   { stores: state.stores, id: ownProps.match.params.id, basePath: ownProps.match.path }
 );
-const mapDispatchToProps: any = (dispatch: any) => ({
-  setRoute: (value: string) => dispatch({ type: 'SET_ROUTE', value }),
-});
 
-export default connect(mapStateToProps, mapDispatchToProps)(StorePage);
+export default connect(mapStateToProps)(StorePage);

@@ -1,26 +1,14 @@
 import React from 'react';
 import { Redirect, Route } from 'react-router-dom';
-import {
-  IonApp,
-  IonIcon,
-  IonLabel,
-  IonRouterOutlet,
-  IonMenu,
-  IonHeader,
-  IonTitle,
-  IonContent,
-  IonList,
-  IonItem,
-  IonToolbar,
-  IonMenuToggle,
-} from '@ionic/react';
+import { IonApp, IonRouterOutlet } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
-import { pricetag, settingsSharp } from 'ionicons/icons';
 
 import { connect } from 'react-redux';
 
 import Config from './pages/Config';
 import Stores from './pages/Stores';
+
+import Menu from './components/Menu';
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -43,41 +31,15 @@ import './theme/variables.css';
 
 interface AppProps {
   forceDarkmode: boolean;
-  stores: Array<{name: string;}>;
-  route: string;
 }
 
-const App: React.FC<AppProps> = ({ forceDarkmode, stores, route }) => {
+const App: React.FC<AppProps> = ({ forceDarkmode }) => {
   document.body.classList.toggle('dark', forceDarkmode || window.matchMedia('(prefers-color-scheme: dark)').matches);
-
-  const checkColor = (routes: string) => routes === route ? 'tertiary' : '';
 
   return (
     <IonApp>
       <IonReactRouter>
-        <IonMenu contentId="main" side="start">
-          <IonHeader>
-            <IonToolbar color="primary">
-              <IonTitle>Shopping Lists</IonTitle>
-            </IonToolbar>
-          </IonHeader>
-          <IonContent>
-            <IonMenuToggle>
-              <IonList>
-                {stores.map((store: {name: string;}, id: number) => (
-                  <IonItem routerLink={`/store/${id}`} key={id} color={checkColor(`/store/${id}`)}>
-                    <IonIcon icon={pricetag} slot="start" />
-                    <IonLabel>{store.name}</IonLabel>
-                  </IonItem>
-                ))}
-                <IonItem routerLink="/configuration" color={checkColor('/configuration')}>
-                  <IonIcon icon={settingsSharp} slot="start" />
-                  <IonLabel>Settings</IonLabel>
-                </IonItem>
-              </IonList>
-            </IonMenuToggle>
-          </IonContent>
-        </IonMenu>
+        <Menu />
         <IonRouterOutlet id="main" animated={false}>
           <Route path="/store/:id" component={Stores} />
           <Route path="/configuration" component={Config} exact={true} />

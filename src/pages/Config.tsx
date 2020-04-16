@@ -1,31 +1,27 @@
-import React, { useState, useEffect } from 'react';
-
+import React, { useState } from 'react';
 
 import { connect } from 'react-redux';
 
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonList, IonItem, IonLabel, IonToggle, IonItemDivider, IonReorderGroup, IonReorder, IonFab, IonFabButton, IonIcon, IonModal, IonInput, IonCard, IonCardHeader, IonCardTitle, IonCardContent, IonButton, IonGrid, IonRow, IonCol, IonMenuButton } from '@ionic/react';
+import {
+  IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonList, IonItem,
+  IonLabel, IonToggle, IonItemDivider, IonReorderGroup, IonReorder, IonFab,
+  IonFabButton, IonIcon, IonModal, IonInput, IonCard, IonCardHeader, IonCardTitle,
+  IonCardContent, IonButton, IonGrid, IonRow, IonCol, IonMenuButton,
+} from '@ionic/react';
 import { ItemReorderEventDetail } from '@ionic/core';
 import { addOutline } from 'ionicons/icons';
-import { useLocation } from 'react-router';
 
 interface ConfigProps {
   forceDarkmode: boolean;
   stores: Array<{name: string;}>;
   toogleForceDarkmode: Function;
-  setRoute: Function;
   addNewStore: Function;
   changeStoreOrder: Function;
 }
 
-const Config: React.FC<ConfigProps> = ({ forceDarkmode, stores, toogleForceDarkmode, setRoute, addNewStore, changeStoreOrder }) => {
+const Config: React.FC<ConfigProps> = ({ forceDarkmode, stores, toogleForceDarkmode, addNewStore, changeStoreOrder }) => {
   const [showModal, setShowModal] = useState<boolean>(false);
   const [storeName, setStoreName] = useState<string>('');
-
-  const loc = useLocation();
-
-  useEffect(() => {
-    setRoute(loc.pathname);
-  }, [loc, setRoute]);
 
   const toggleDarkmode: Function = () => {
     toogleForceDarkmode(!forceDarkmode);
@@ -100,7 +96,6 @@ const Config: React.FC<ConfigProps> = ({ forceDarkmode, stores, toogleForceDarkm
 const mapStateToProps: any = (state: any) => state;
 const mapDispatchToProps: any = (dispatch: any) => ({
   toogleForceDarkmode: (value: boolean) => dispatch({ type: 'SET_FORCE_DARKMODE', value }),
-  setRoute: (value: boolean) => dispatch({ type: 'SET_ROUTE', value }),
   addNewStore: (value: string) => dispatch({ type: 'ADD_NEW_STORE', value }),
   changeStoreOrder: (value: Array<number>) => dispatch({ type: 'CHANGE_STORE_ORDER', value }),
 });
