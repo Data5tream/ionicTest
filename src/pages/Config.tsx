@@ -12,13 +12,6 @@ import { addOutline } from 'ionicons/icons';
 
 import StoreModal from '../components/StoreModal';
 
-interface ConfigProps {
-  forceDarkmode: boolean;
-  stores: Array<{name: string;}>;
-  toogleForceDarkmode: Function;
-  changeStoreOrder: Function;
-}
-
 interface RootState {
   forceDarkmode: boolean;
   stores: Array<{name: string;}>;
