@@ -44,11 +44,11 @@ const StorePage: React.FC<StorePageProps> = ({ stores, id, basePath }) => {
 
   const his = useHistory();
 
-  const initSlider = async function(this: any): Promise<void> {
-    setSlider(await this);
+  const initSlider = function(this: SliderInterface): void {
+    setSlider(this);
   };
 
-  const slideChange = async function(this: any): Promise<void> {
+  const slideChange = async function(this: SliderInterface): Promise<void> {
     const slide = await this.getActiveIndex();
     setCurrentSlide(slide);
     his.replace(`${basePath.replace(':id', '')}${slide}`);
@@ -57,7 +57,7 @@ const StorePage: React.FC<StorePageProps> = ({ stores, id, basePath }) => {
   useEffect(() => {
     if (sliderData.length > currentSlide) {
       setCurrentTitle(sliderData[currentSlide].name);
-      (async () => {
+      (async (): Promise<void> => {
         if (slider && currentSlide !== await slider.getActiveIndex()) {
           slider.slideTo(currentSlide);
         }
