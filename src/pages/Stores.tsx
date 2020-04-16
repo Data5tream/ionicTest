@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import ReactDOM from 'react-dom';
 import ReactDOMServer from 'react-dom/server';
 
 import { connect } from 'react-redux';
@@ -78,16 +79,20 @@ const StorePage: React.FC<StorePageProps> = ({ stores, id, basePath }) => {
   useEffect(() => {
     if (slider) {
       (async (): Promise<void> => {
-        /* IonSlides component is bugged and doesn't allow dynamic slides
+        /* IonSlides component is bugged and doesn't allow dynamic slides.
+           Add slides without content to swiper and then populate them with
+           ReactDOM.render()
            https://github.com/ionic-team/ionic/issues/18784 */
         const swiper = await slider.getSwiper();
         swiper.removeAllSlides();
         swiper.appendSlide(sliderData.map(ele => ReactDOMServer.renderToString(
-          <IonSlide key={ele.name} style={{ background: ele.color }}>
-            <StoreList store={ele} />
-          </IonSlide>)
+          <IonSlide key={ele.name} style={{ background: ele.color }} suppressHydrationWarning={true} />)
         ));
         swiper.updateSlides();
+        const slides = document.querySelectorAll('ion-slide');
+        sliderData.forEach((ele, i) => {
+          ReactDOM.render(<StoreList store={ele} />, slides[i]);
+        });
       })();
     }
   }, [slider, sliderData]);
