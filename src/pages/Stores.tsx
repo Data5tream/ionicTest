@@ -2,14 +2,14 @@ import React, { useState, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import ReactDOMServer from 'react-dom/server';
 
-import { connect } from 'react-redux';
+import { connect, ConnectedProps } from 'react-redux';
 
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonSlides, IonSlide, IonMenuButton } from '@ionic/react';
 
 import StoreList from '../components/StoreList';
 import { useHistory } from 'react-router';
 
-interface StorePageProps {
+interface RootState {
   stores: [{
     name: string;
     color: string;
@@ -20,6 +20,15 @@ interface StorePageProps {
   }];
   id: number;
   basePath: string;
+}
+
+interface OwnPropInterface {
+  match: {
+    params: {
+      id: number;
+    };
+    path: string;
+  };
 }
 
 interface SliderDataInterface {
@@ -39,7 +48,21 @@ interface SliderInterface {
   getSwiper: Function;
 }
 
-const StorePage: React.FC<StorePageProps> = ({ stores, id, basePath }) => {
+const mapState = (state: RootState, ownProps: OwnPropInterface): {} => (
+  { stores: state.stores, id: ownProps.match.params.id, basePath: ownProps.match.path }
+);
+const mapDispatch = {
+  changeItemStatus: (value: {storeId: number; itemId: number; itemValue: boolean;}): {} => ({ type: 'CHANGE_ITEM_STATUS', value }),
+};
+
+const connector = connect(mapState, mapDispatch);
+
+type PropsFromRedux = ConnectedProps<typeof connector>
+
+type Props = PropsFromRedux & RootState;
+
+const StorePage: React.FC<Props> = (props: Props) => {
+  const { stores, id, basePath, changeItemStatus } = props;
   const [currentTitle, setCurrentTitle] = useState(stores[0].name);
   const [currentSlide, setCurrentSlide] = useState(0);
   const [sliderData, setSliderData] = useState<Array<SliderDataInterface>>([]);
@@ -91,7 +114,7 @@ const StorePage: React.FC<StorePageProps> = ({ stores, id, basePath }) => {
         swiper.updateSlides();
         const slides = document.querySelectorAll('ion-slide');
         sliderData.forEach((ele, i) => {
-          ReactDOM.render(<StoreList store={ele} />, slides[i]);
+          ReactDOM.render(<StoreList store={{ ...ele, id: i }} changeItemStatus={changeItemStatus} />, slides[i]);
         });
       })();
     }
@@ -108,8 +131,8 @@ const StorePage: React.FC<StorePageProps> = ({ stores, id, basePath }) => {
       <IonContent>
         <IonSlides style={{ height: '100%' }} onIonSlidesDidLoad={initSlider} onIonSlideDidChange={slideChange}>
           {sliderData
-            ? sliderData.map(store => <IonSlide key={store.name} style={{ background: store.color }}>
-              <StoreList store={store} />
+            ? sliderData.map((store, i) => <IonSlide key={store.name} style={{ background: store.color }}>
+              <StoreList store={{ ...store, id: i }} changeItemStatus={changeItemStatus} />
             </IonSlide>)
             : <IonSlide>No data available</IonSlide>}
         </IonSlides>
@@ -117,17 +140,4 @@ const StorePage: React.FC<StorePageProps> = ({ stores, id, basePath }) => {
     </IonPage>);
 };
 
-interface OwnPropInterface {
-  match: {
-    params: {
-      id: number;
-    };
-    path: string;
-  };
-}
-
-const mapStateToProps = (state: StorePageProps, ownProps: OwnPropInterface): {} => (
-  { stores: state.stores, id: ownProps.match.params.id, basePath: ownProps.match.path }
-);
-
-export default connect(mapStateToProps)(StorePage);
+export default connector(StorePage);
