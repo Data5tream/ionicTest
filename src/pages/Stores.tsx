@@ -109,8 +109,7 @@ const StorePage: React.FC<Props> = (props: Props) => {
         const swiper = await slider.getSwiper();
         swiper.removeAllSlides();
         swiper.appendSlide(sliderData.map(ele => ReactDOMServer.renderToString(
-          <IonSlide key={ele.name} style={{ background: ele.color }} suppressHydrationWarning={true} />)
-        ));
+          <IonSlide key={ele.name} style={{ background: ele.color }} suppressHydrationWarning={true} />)));
         swiper.updateSlides();
         const slides = document.querySelectorAll('ion-slide');
         sliderData.forEach((ele, i) => {

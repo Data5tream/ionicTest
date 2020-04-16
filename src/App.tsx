@@ -50,6 +50,6 @@ const App: React.FC<AppProps> = ({ forceDarkmode }) => {
   );
 };
 
-const mapStateToProps: any = (state: any) => state;
+const mapStateToProps = (state: AppProps): AppProps => state;
 
-export default connect<AppProps>(mapStateToProps)(App);
+export default connect(mapStateToProps)(App);
