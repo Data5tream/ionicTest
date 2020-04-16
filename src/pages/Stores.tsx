@@ -65,6 +65,7 @@ const StorePage: React.FC<Props> = (props: Props) => {
   const { stores, id, basePath, changeItemStatus } = props;
   const [currentTitle, setCurrentTitle] = useState(stores[0].name);
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [needsRepaint, setNeedsRepaint] = useState(false);
   const [sliderData, setSliderData] = useState<Array<SliderDataInterface>>([]);
   const [slider, setSlider] = useState<SliderInterface>();
 
@@ -93,14 +94,37 @@ const StorePage: React.FC<Props> = (props: Props) => {
 
   useEffect(() => {
     setSliderData(stores);
-  }, [stores, slider]);
+    let needsPaint = false;
+
+    /* Negated conditions make a lot more sense here */
+    // eslint-disable-next-line no-negated-condition
+    if (stores.length !== sliderData.length) {
+      needsPaint = true;
+    } else {
+      stores.forEach((ele, i) => {
+        // eslint-disable-next-line no-negated-condition
+        if (ele.entries.length !== sliderData[i].entries.length) {
+          needsPaint = true;
+        } else {
+          ele.entries.forEach((e, j) => {
+            if (e.name !== sliderData[i].entries[j].name) {
+              needsPaint = true;
+            }
+          });
+        }
+      });
+    }
+    if (needsPaint) {
+      setNeedsRepaint(true);
+    }
+  }, [stores]);
 
   useEffect(() => {
     setCurrentSlide(id);
   }, [id]);
 
   useEffect(() => {
-    if (slider) {
+    if (slider && needsRepaint) {
       (async (): Promise<void> => {
         /* IonSlides component is bugged and doesn't allow dynamic slides.
            Add slides without content to swiper and then populate them with
@@ -115,9 +139,10 @@ const StorePage: React.FC<Props> = (props: Props) => {
         sliderData.forEach((ele, i) => {
           ReactDOM.render(<StoreList store={{ ...ele, id: i }} changeItemStatus={changeItemStatus} />, slides[i]);
         });
+        setNeedsRepaint(false);
       })();
     }
-  }, [slider, sliderData]);
+  }, [slider, sliderData, needsRepaint]);
 
   return (
     <IonPage>
