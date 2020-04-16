@@ -12,12 +12,12 @@ interface RootState {
   setShowModal: Function;
 }
 
-const mapState: any = (state: unknown, ownProps: RootState) => ({
+const mapState = (state: unknown, ownProps: RootState): {} => ({
   showModal: ownProps.showModal,
   setShowModal: ownProps.setShowModal,
 });
 const mapDispatch = {
-  addNewStore: (value: string) => ({ type: 'ADD_NEW_STORE', value }),
+  addNewStore: (value: string): {} => ({ type: 'ADD_NEW_STORE', value }),
 };
 
 const connector = connect(mapState, mapDispatch);
@@ -42,14 +42,14 @@ const StoreModal: React.FC<Props> = (props: Props) => {
           <IonCardTitle>Add a new store</IonCardTitle>
         </IonCardHeader>
         <IonCardContent>
-          <IonInput value={storeName} placeholder="Store name" onIonChange={e => setStoreName(e.detail.value!)} />
+          <IonInput value={storeName} placeholder="Store name" onIonChange={(e): void => setStoreName(e.detail.value!)} />
           <IonGrid>
             <IonRow class="ion-justify-content-between">
               <IonCol>
-                <IonButton color="danger" fill="outline" onClick={() => props.setShowModal(false)}>Close</IonButton>
+                <IonButton color="danger" fill="outline" onClick={(): void => props.setShowModal(false)}>Close</IonButton>
               </IonCol>
               <IonCol class="ion-text-end">
-                <IonButton color="success" onClick={() => saveNewStore()}>Save</IonButton>
+                <IonButton color="success" onClick={(): void => saveNewStore()}>Save</IonButton>
               </IonCol>
             </IonRow>
           </IonGrid>

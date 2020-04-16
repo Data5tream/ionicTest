@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import { connect } from 'react-redux';
+import { connect, ConnectedProps } from 'react-redux';
 
 import {
   IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonList, IonItem,
@@ -19,8 +19,26 @@ interface ConfigProps {
   changeStoreOrder: Function;
 }
 
-const Config: React.FC<ConfigProps> = ({ forceDarkmode, stores, toogleForceDarkmode, changeStoreOrder }) => {
+interface RootState {
+  forceDarkmode: boolean;
+  stores: Array<{name: string;}>;
+}
+
+const mapState = (state: RootState): {} => state;
+const mapDispatch = {
+  toogleForceDarkmode: (value: boolean): {} => ({ type: 'SET_FORCE_DARKMODE', value }),
+  changeStoreOrder: (value: Array<number>): {} => ({ type: 'CHANGE_STORE_ORDER', value }),
+};
+
+const connector = connect(mapState, mapDispatch);
+
+type PropsFromRedux = ConnectedProps<typeof connector>
+
+type Props = PropsFromRedux & RootState;
+
+const Config: React.FC<Props> = (props: Props) => {
   const [showModal, setShowModal] = useState<boolean>(false);
+  const { forceDarkmode, stores, toogleForceDarkmode, changeStoreOrder } = props;
 
   const toggleDarkmode: Function = () => {
     toogleForceDarkmode(!forceDarkmode);
@@ -42,12 +60,12 @@ const Config: React.FC<ConfigProps> = ({ forceDarkmode, stores, toogleForceDarkm
         <IonList>
           <IonItem>
             <IonLabel>Force DarkMode</IonLabel>
-            <IonToggle slot="end" checked={forceDarkmode} onIonChange={() => toggleDarkmode()}></IonToggle>
+            <IonToggle slot="end" checked={forceDarkmode} onIonChange={(): void => toggleDarkmode()}></IonToggle>
           </IonItem>
           <IonItemDivider>
             <IonLabel>Stores</IonLabel>
           </IonItemDivider>
-          <IonReorderGroup disabled={false} onIonItemReorder={e => onReorder(e)}>
+          <IonReorderGroup disabled={false} onIonItemReorder={(e): void => onReorder(e)}>
             {stores.map(store => (
               <IonItem key={store.name}>
                 <IonLabel>{store.name}</IonLabel>
@@ -57,7 +75,7 @@ const Config: React.FC<ConfigProps> = ({ forceDarkmode, stores, toogleForceDarkm
           </IonReorderGroup>
         </IonList>
         <IonFab vertical="bottom" horizontal="end" slot="fixed">
-          <IonFabButton onClick={() => setShowModal(true)}>
+          <IonFabButton onClick={(): void => setShowModal(true)}>
             <IonIcon icon={addOutline} />
           </IonFabButton>
         </IonFab>
@@ -67,10 +85,4 @@ const Config: React.FC<ConfigProps> = ({ forceDarkmode, stores, toogleForceDarkm
   );
 };
 
-const mapStateToProps: any = (state: any) => state;
-const mapDispatchToProps: any = (dispatch: any) => ({
-  toogleForceDarkmode: (value: boolean) => dispatch({ type: 'SET_FORCE_DARKMODE', value }),
-  changeStoreOrder: (value: Array<number>) => dispatch({ type: 'CHANGE_STORE_ORDER', value }),
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(Config);
+export default connector(Config);

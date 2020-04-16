@@ -15,6 +15,8 @@ interface MenuProps {
 const Menu: React.FC<MenuProps> = ({ stores }) => {
   const loc = useLocation();
 
+  const checkRoute = (route: string): string => loc.pathname === route ? 'active' : '';
+
   return (
     <IonMenu contentId="main" side="start">
       <IonHeader>
@@ -26,12 +28,12 @@ const Menu: React.FC<MenuProps> = ({ stores }) => {
         <IonMenuToggle>
           <IonList>
             {stores.map((store: {name: string;}, id: number) => (
-              <IonItem routerLink={`/store/${id}`} key={id} className={loc.pathname === `/store/${id}` ? 'active' : ''}>
+              <IonItem routerLink={`/store/${id}`} key={id} className={checkRoute(`/store/${id}`)}>
                 <IonIcon icon={pricetag} slot="start" />
                 <IonLabel>{store.name}</IonLabel>
               </IonItem>
             ))}
-            <IonItem routerLink="/configuration" className={loc.pathname === '/configuration' ? 'active' : ''}>
+            <IonItem routerLink="/configuration" className={checkRoute('/configuration')}>
               <IonIcon icon={settingsSharp} slot="start" />
               <IonLabel>Settings</IonLabel>
             </IonItem>
@@ -41,6 +43,6 @@ const Menu: React.FC<MenuProps> = ({ stores }) => {
     </IonMenu>);
 };
 
-const mapStateToProps: any = (state: any) => ({ stores: state.stores });
+const mapStateToProps = (state: MenuProps): MenuProps => state;
 
-export default connect<MenuProps>(mapStateToProps)(Menu);
+export default connect(mapStateToProps)(Menu);

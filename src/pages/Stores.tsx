@@ -20,10 +20,15 @@ interface StorePageProps {
   basePath: string;
 }
 
+interface SliderInterface {
+  activeIndex: number;
+  slideTo: Function;
+}
+
 const StorePage: React.FC<StorePageProps> = ({ stores, id, basePath }) => {
   const [currentTitle, setCurrentTitle] = useState(stores[0].name);
   const [currentSlide, setCurrentSlide] = useState(0);
-  const [slider, setSlider] = useState<any>();
+  const [slider, setSlider] = useState<SliderInterface>();
 
   const his = useHistory();
 
@@ -31,14 +36,14 @@ const StorePage: React.FC<StorePageProps> = ({ stores, id, basePath }) => {
     on: {
       beforeInit(): void {
         // eslint-disable-next-line @typescript-eslint/no-this-alias
-        const slider: any = this;
-        setSlider(slider);
+        const slide: SliderInterface = this as unknown as SliderInterface;
+        setSlider(slide);
       },
       slideChange(): void {
         // eslint-disable-next-line @typescript-eslint/no-this-alias
-        const slider: any = this;
-        setCurrentSlide(slider.activeIndex);
-        his.replace(`${basePath.replace(':id', '')}${slider.activeIndex}`);
+        const slide: SliderInterface = this as unknown as SliderInterface;
+        setCurrentSlide(slide.activeIndex);
+        his.replace(`${basePath.replace(':id', '')}${slide.activeIndex}`);
       },
     },
   };
@@ -76,7 +81,16 @@ const StorePage: React.FC<StorePageProps> = ({ stores, id, basePath }) => {
     </IonPage>);
 };
 
-const mapStateToProps: any = (state: any, ownProps: any) => (
+interface OwnPropInterface {
+  match: {
+    params: {
+      id: number;
+    };
+    path: string;
+  };
+}
+
+const mapStateToProps = (state: StorePageProps, ownProps: OwnPropInterface): {} => (
   { stores: state.stores, id: ownProps.match.params.id, basePath: ownProps.match.path }
 );
 
