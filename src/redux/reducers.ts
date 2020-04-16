@@ -51,7 +51,7 @@ interface ChangeItemStatusInterface {
   itemValue: boolean;
 }
 
-const listApp: any = (state = initialState, action: {type: string; value: unknown;}) => {
+const rootReducer: any = (state = initialState, action: {type: string; value: unknown;}) => {
   switch (action.type) {
     case 'SET_FORCE_DARKMODE':
       return { ...state, forceDarkmode: action.value };
@@ -76,4 +76,4 @@ const listApp: any = (state = initialState, action: {type: string; value: unknow
   }
 };
 
-export default listApp;
+export default rootReducer;
