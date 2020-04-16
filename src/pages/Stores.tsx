@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import ReactDOMServer from 'react-dom/server';
 
 import { connect } from 'react-redux';
 
@@ -34,6 +35,7 @@ interface SliderInterface {
   slideTo: Function;
   update: Function;
   getActiveIndex: Function;
+  getSwiper: Function;
 }
 
 const StorePage: React.FC<StorePageProps> = ({ stores, id, basePath }) => {
@@ -74,7 +76,20 @@ const StorePage: React.FC<StorePageProps> = ({ stores, id, basePath }) => {
   }, [id]);
 
   useEffect(() => {
-    if (slider) { slider.update(); }
+    if (slider) {
+      (async (): Promise<void> => {
+        /* IonSlides component is bugged and doesn't allow dynamic slides
+           https://github.com/ionic-team/ionic/issues/18784 */
+        const swiper = await slider.getSwiper();
+        swiper.removeAllSlides();
+        swiper.appendSlide(sliderData.map(ele => ReactDOMServer.renderToString(
+          <IonSlide key={ele.name} style={{ background: ele.color }}>
+            <StoreList store={ele} />
+          </IonSlide>)
+        ));
+        swiper.updateSlides();
+      })();
+    }
   }, [slider, sliderData]);
 
   return (
