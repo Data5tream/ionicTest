@@ -43,7 +43,7 @@ const App: React.FC<AppProps> = ({ forceDarkmode }) => {
         <IonRouterOutlet id="main" animated={false}>
           <Route path="/store/:id" component={Stores} />
           <Route path="/configuration" component={Config} exact={true} />
-          <Route path="/" render={() => <Redirect to="/store/0" />} exact={true} />
+          <Route path="/" render={() => <Redirect to="/store/0" />} />
         </IonRouterOutlet>
       </IonReactRouter>
     </IonApp>
