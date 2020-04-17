@@ -35,6 +35,8 @@ const mapState = (state: RootState, ownProps: OwnPropInterface): {} => (
 );
 const mapDispatch = {
   changeItemStatus: (value: {storeId: number; itemId: number; itemValue: boolean;}): {} => ({ type: 'CHANGE_ITEM_STATUS', value }),
+  deleteItem: (value: {storeId: number; itemId: number;}): {} => ({ type: 'REMOVE_ITEM', value }),
+  addItem: (value: {storeId: number; itemName: string;}): {} => ({ type: 'ADD_ITEM', value }),
 };
 
 const connector = connect(mapState, mapDispatch);
@@ -44,7 +46,7 @@ type PropsFromRedux = ConnectedProps<typeof connector>
 type Props = PropsFromRedux & RootState;
 
 const StorePage: React.FC<Props> = (props: Props) => {
-  const { stores, id, basePath, changeItemStatus } = props;
+  const { stores, id, basePath, changeItemStatus, deleteItem, addItem } = props;
   const [currentTitle, setCurrentTitle] = useState(stores[0].name);
   const [currentSlide, setCurrentSlide] = useState(Number(id));
 
@@ -84,7 +86,7 @@ const StorePage: React.FC<Props> = (props: Props) => {
         <SwipeableViews index={currentSlide} onChangeIndex={updateIndex} style={{ height: '100%' }} containerStyle={{ height: '100%' }}>
           {stores
             ? stores.map((store, i) => <div key={store.name} style={storeContainer(store.color)}>
-              <StoreList store={{ ...store, id: i }} changeItemStatus={changeItemStatus} />
+              <StoreList store={{ ...store, id: i }} changeItemStatus={changeItemStatus} deleteItem={deleteItem} addItem={addItem} />
             </div>)
             : <div>No data available</div>}
         </SwipeableViews>
