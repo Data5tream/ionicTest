@@ -46,7 +46,7 @@ type Props = PropsFromRedux & RootState;
 const StorePage: React.FC<Props> = (props: Props) => {
   const { stores, id, basePath, changeItemStatus } = props;
   const [currentTitle, setCurrentTitle] = useState(stores[0].name);
-  const [currentSlide, setCurrentSlide] = useState(id);
+  const [currentSlide, setCurrentSlide] = useState(Number(id));
 
   const his = useHistory();
 
