@@ -10,11 +10,18 @@ import {
 import { ItemReorderEventDetail } from '@ionic/core';
 import { addOutline } from 'ionicons/icons';
 
+import AddStoreModal from '../components/AddStoreModal';
 import StoreModal from '../components/StoreModal';
+
+interface StoreData {
+  id: number;
+  name: string;
+  color: string;
+}
 
 interface RootState {
   forceDarkmode: boolean;
-  stores: Array<{name: string;}>;
+  stores: Array<StoreData>;
 }
 
 const mapState = (state: RootState): {} => state;
@@ -30,7 +37,9 @@ type PropsFromRedux = ConnectedProps<typeof connector>
 type Props = PropsFromRedux & RootState;
 
 const Config: React.FC<Props> = (props: Props) => {
+  const [showAddModal, setShowAddModal] = useState<boolean>(false);
   const [showModal, setShowModal] = useState<boolean>(false);
+  const [storeData, setStoreData] = useState<StoreData>({ id: 0, name: 't', color: '' });
   const { forceDarkmode, stores, toogleForceDarkmode, changeStoreOrder } = props;
 
   const toggleDarkmode: Function = () => {
@@ -41,6 +50,12 @@ const Config: React.FC<Props> = (props: Props) => {
     changeStoreOrder([event.detail.from, event.detail.to]);
     event.detail.complete();
   };
+
+  const onStoreClick: Function = (store: StoreData) => {
+    setStoreData(store);
+    setShowModal(true);
+  };
+
   return (
     <IonPage>
       <IonHeader>
@@ -59,20 +74,21 @@ const Config: React.FC<Props> = (props: Props) => {
             <IonLabel>Stores</IonLabel>
           </IonItemDivider>
           <IonReorderGroup disabled={false} onIonItemReorder={(e): void => onReorder(e)}>
-            {stores.map(store => (
+            {stores.map((store, i) => (
               <IonItem key={store.name}>
-                <IonLabel>{store.name}</IonLabel>
+                <IonLabel onClick={(): void => onStoreClick({ ...store, id: i })}>{store.name}</IonLabel>
                 <IonReorder slot="end" />
               </IonItem>
             ))}
           </IonReorderGroup>
         </IonList>
         <IonFab vertical="bottom" horizontal="end" slot="fixed">
-          <IonFabButton onClick={(): void => setShowModal(true)}>
+          <IonFabButton onClick={(): void => setShowAddModal(true)}>
             <IonIcon icon={addOutline} />
           </IonFabButton>
         </IonFab>
-        <StoreModal showModal={showModal} setShowModal={setShowModal} />
+        <StoreModal showModal={showModal} setShowModal={setShowModal} store={storeData} />
+        <AddStoreModal showModal={showAddModal} setShowModal={setShowAddModal} />
       </IonContent>
     </IonPage>
   );
