@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import ReactDOM from 'react-dom';
-import ReactDOMServer from 'react-dom/server';
 
 import { connect, ConnectedProps } from 'react-redux';
 
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonSlides, IonSlide, IonMenuButton } from '@ionic/react';
+import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonMenuButton } from '@ionic/react';
+import SwipeableViews from 'react-swipeable-views';
 
 import StoreList from '../components/StoreList';
 import { useHistory } from 'react-router';
@@ -31,23 +30,6 @@ interface OwnPropInterface {
   };
 }
 
-interface SliderDataInterface {
-  name: string;
-  color: string;
-  entries: Array<{
-    name: string;
-    done: boolean;
-  }>;
-}
-
-
-interface SliderInterface {
-  slideTo: Function;
-  update: Function;
-  getActiveIndex: Function;
-  getSwiper: Function;
-}
-
 const mapState = (state: RootState, ownProps: OwnPropInterface): {} => (
   { stores: state.stores, id: ownProps.match.params.id, basePath: ownProps.match.path }
 );
@@ -64,85 +46,31 @@ type Props = PropsFromRedux & RootState;
 const StorePage: React.FC<Props> = (props: Props) => {
   const { stores, id, basePath, changeItemStatus } = props;
   const [currentTitle, setCurrentTitle] = useState(stores[0].name);
-  const [currentSlide, setCurrentSlide] = useState(0);
-  const [needsRepaint, setNeedsRepaint] = useState(false);
-  const [sliderData, setSliderData] = useState<Array<SliderDataInterface>>([]);
-  const [slider, setSlider] = useState<SliderInterface>();
+  const [currentSlide, setCurrentSlide] = useState(id);
 
   const his = useHistory();
 
-  const initSlider = function(this: SliderInterface): void {
-    setSlider(this);
-  };
-
-  const slideChange = async function(this: SliderInterface): Promise<void> {
-    const slide = await this.getActiveIndex();
-    setCurrentSlide(slide);
-    his.replace(`${basePath.replace(':id', '')}${slide}`);
-  };
+  useEffect(() => {
+    if (stores.length > currentSlide) {
+      setCurrentTitle(stores[currentSlide].name);
+    }
+  }, [currentSlide, stores]);
 
   useEffect(() => {
-    if (sliderData.length > currentSlide) {
-      setCurrentTitle(sliderData[currentSlide].name);
-      (async (): Promise<void> => {
-        if (slider && currentSlide !== await slider.getActiveIndex()) {
-          slider.slideTo(currentSlide);
-        }
-      })();
-    }
-  }, [currentSlide, sliderData, slider]);
-
-  useEffect(() => {
-    setSliderData(stores);
-    let needsPaint = false;
-
-    /* Negated conditions make a lot more sense here */
-    // eslint-disable-next-line no-negated-condition
-    if (stores.length !== sliderData.length) {
-      needsPaint = true;
-    } else {
-      stores.forEach((ele, i) => {
-        // eslint-disable-next-line no-negated-condition
-        if (ele.entries.length !== sliderData[i].entries.length) {
-          needsPaint = true;
-        } else {
-          ele.entries.forEach((e, j) => {
-            if (e.name !== sliderData[i].entries[j].name) {
-              needsPaint = true;
-            }
-          });
-        }
-      });
-    }
-    if (needsPaint) {
-      setNeedsRepaint(true);
-    }
-  }, [stores]);
-
-  useEffect(() => {
-    setCurrentSlide(id);
+    setCurrentSlide(Number(id));
   }, [id]);
 
-  useEffect(() => {
-    if (slider && needsRepaint) {
-      (async (): Promise<void> => {
-        /* IonSlides component is bugged and doesn't allow dynamic slides.
-           Add slides without content to swiper and then populate them with
-           ReactDOM.render()
-           https://github.com/ionic-team/ionic/issues/18784 */
-        const swiper = await slider.getSwiper();
-        swiper.removeAllSlides();
-        swiper.appendSlide(sliderData.map(ele => ReactDOMServer.renderToString(
-          <IonSlide key={ele.name} style={{ background: ele.color }} suppressHydrationWarning={true} />)));
-        swiper.updateSlides();
-        const slides = document.querySelectorAll('ion-slide');
-        sliderData.forEach((ele, i) => {
-          ReactDOM.render(<StoreList store={{ ...ele, id: i }} changeItemStatus={changeItemStatus} />, slides[i]);
-        });
-        setNeedsRepaint(false);
-      })();
-    }
-  }, [slider, sliderData, needsRepaint]);
+  const updateIndex = (index: number): void => {
+    setCurrentSlide(index);
+    his.replace(`${basePath.replace(':id', '')}${index}`);
+  };
+
+  const storeContainer = (color: string): {} => ({
+    height: '100%',
+    display: 'flex',
+    alignItems: 'flex-start',
+    background: color,
+  });
 
   return (
     <IonPage>
@@ -153,13 +81,13 @@ const StorePage: React.FC<Props> = (props: Props) => {
         </IonToolbar>
       </IonHeader>
       <IonContent>
-        <IonSlides style={{ height: '100%' }} onIonSlidesDidLoad={initSlider} onIonSlideDidChange={slideChange}>
-          {sliderData
-            ? sliderData.map((store, i) => <IonSlide key={store.name} style={{ background: store.color }}>
+        <SwipeableViews index={currentSlide} onChangeIndex={updateIndex} style={{ height: '100%' }} containerStyle={{ height: '100%' }}>
+          {stores
+            ? stores.map((store, i) => <div key={store.name} style={storeContainer(store.color)}>
               <StoreList store={{ ...store, id: i }} changeItemStatus={changeItemStatus} />
-            </IonSlide>)
-            : <IonSlide>No data available</IonSlide>}
-        </IonSlides>
+            </div>)
+            : <div>No data available</div>}
+        </SwipeableViews>
       </IonContent>
     </IonPage>);
 };
