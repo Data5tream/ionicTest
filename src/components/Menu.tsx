@@ -34,10 +34,12 @@ const Menu: React.FC<MenuProps> = ({ stores }) => {
               </IonItem>
             </IonMenuToggle>
           ))}
-          <IonItem routerLink="/configuration" className={checkRoute('/configuration')}>
-            <IonIcon icon={settingsSharp} slot="start" />
-            <IonLabel>Settings</IonLabel>
-          </IonItem>
+          <IonMenuToggle autoHide={false}>
+            <IonItem routerLink="/configuration" className={checkRoute('/configuration')}>
+              <IonIcon icon={settingsSharp} slot="start" />
+              <IonLabel>Settings</IonLabel>
+            </IonItem>
+          </IonMenuToggle>
         </IonList>
       </IonContent>
     </IonMenu>);
