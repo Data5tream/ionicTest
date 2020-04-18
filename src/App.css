@@ -1,0 +1,8 @@
+.ion-page {
+  max-width: 1200px;
+  margin: auto;
+}
+
+.split-pane-md {
+  --side-max-width: 300px;
+}

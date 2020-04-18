@@ -25,20 +25,20 @@ const Menu: React.FC<MenuProps> = ({ stores }) => {
         </IonToolbar>
       </IonHeader>
       <IonContent>
-        <IonMenuToggle>
-          <IonList>
-            {stores.map((store: {name: string;}, id: number) => (
-              <IonItem routerLink={`/store/${id}`} key={id} className={checkRoute(`/store/${id}`)}>
+        <IonList lines="none">
+          {stores.map((store: {name: string;}, id: number) => (
+            <IonMenuToggle key={id} autoHide={false}>
+              <IonItem routerLink={`/store/${id}`} className={checkRoute(`/store/${id}`)}>
                 <IonIcon icon={pricetag} slot="start" />
                 <IonLabel>{store.name}</IonLabel>
               </IonItem>
-            ))}
-            <IonItem routerLink="/configuration" className={checkRoute('/configuration')}>
-              <IonIcon icon={settingsSharp} slot="start" />
-              <IonLabel>Settings</IonLabel>
-            </IonItem>
-          </IonList>
-        </IonMenuToggle>
+            </IonMenuToggle>
+          ))}
+          <IonItem routerLink="/configuration" className={checkRoute('/configuration')}>
+            <IonIcon icon={settingsSharp} slot="start" />
+            <IonLabel>Settings</IonLabel>
+          </IonItem>
+        </IonList>
       </IonContent>
     </IonMenu>);
 };

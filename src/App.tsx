@@ -1,6 +1,6 @@
 import React from 'react';
 import { Redirect, Route } from 'react-router-dom';
-import { IonApp, IonRouterOutlet } from '@ionic/react';
+import { IonApp, IonRouterOutlet, IonSplitPane } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
 
 import { connect } from 'react-redux';
@@ -29,6 +29,8 @@ import '@ionic/react/css/display.css';
 /* Theme variables */
 import './theme/variables.css';
 
+import './App.css';
+
 interface AppProps {
   forceDarkmode: boolean;
 }
@@ -39,12 +41,14 @@ const App: React.FC<AppProps> = ({ forceDarkmode }) => {
   return (
     <IonApp>
       <IonReactRouter>
-        <Menu />
-        <IonRouterOutlet id="main" animated={false}>
-          <Route path="/store/:id" component={Stores} />
-          <Route path="/configuration" component={Config} exact={true} />
-          <Route path="/" render={() => <Redirect to="/store/0" />} />
-        </IonRouterOutlet>
+        <IonSplitPane contentId="main">
+          <Menu />
+          <IonRouterOutlet id="main" animated={false}>
+            <Route path="/store/:id" component={Stores} />
+            <Route path="/configuration" component={Config} exact={true} />
+            <Route path="/" render={() => <Redirect to="/store/0" />} />
+          </IonRouterOutlet>
+        </IonSplitPane>
       </IonReactRouter>
     </IonApp>
   );
