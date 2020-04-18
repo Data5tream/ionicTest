@@ -12,6 +12,25 @@ const initialState = {
   ],
 };
 
+const colors = [
+  '211, 47, 47',
+  '194, 24, 91',
+  '123, 31, 162',
+  '81, 45, 168',
+  '48, 63, 159',
+  '25, 118, 210',
+  '2, 136, 209',
+  '0, 151, 167',
+  '0, 121, 107',
+  '56, 142, 60',
+  '104, 159, 56',
+  '175, 180, 43',
+  '251, 192, 45',
+  '255, 160, 0',
+  '245, 124, 0',
+  '230, 74, 25',
+];
+
 interface ChangeItemInterface {
   storeId: number;
   itemId: number;
@@ -36,7 +55,7 @@ const rootReducer: any = (state = initialState, action: {type: string; value: un
 
     /* STORE MANAGEMENT */
     case 'ADD_NEW_STORE':
-      return { ...state, stores: [...state.stores, { name: action.value as string, color: 'red', entries: [] }] };
+      return { ...state, stores: [...state.stores, { name: action.value as string, color: colors[Math.floor(Math.random() * colors.length)], entries: [] }] };
     case 'SAVE_STORE':
       params = action.value as ChangeStoreInterface;
       stores = [...state.stores];
