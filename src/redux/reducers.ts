@@ -4,7 +4,10 @@ const initialState = {
     {
       name: 'Default',
       color: '#D32F2F',
-      entries: [],
+      entries: [] as Array<{
+        name: string;
+        done: boolean;
+      }>,
     },
   ],
 };
