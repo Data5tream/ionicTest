@@ -9,7 +9,7 @@ import { connect } from 'react-redux';
 import './Menu.css';
 
 interface MenuProps {
-  stores: Array<{name: string;}>;
+  stores: Array<{name: string; color: string;}>;
 }
 
 const Menu: React.FC<MenuProps> = ({ stores }) => {
@@ -26,9 +26,9 @@ const Menu: React.FC<MenuProps> = ({ stores }) => {
       </IonHeader>
       <IonContent>
         <IonList lines="none">
-          {stores.map((store: {name: string;}, id: number) => (
+          {stores.map((store: {name: string; color: string;}, id: number) => (
             <IonMenuToggle key={id} autoHide={false}>
-              <IonItem routerLink={`/store/${id}`} className={checkRoute(`/store/${id}`)}>
+              <IonItem routerLink={`/store/${id}`} className={checkRoute(`/store/${id}`)} style={{ '--store-color': store.color }}>
                 <IonIcon icon={pricetag} slot="start" />
                 <IonLabel>{store.name}</IonLabel>
               </IonItem>

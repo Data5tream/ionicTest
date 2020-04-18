@@ -1,7 +1,7 @@
 ion-menu.md ion-item.active {
-    --background: rgba(var(--ion-color-primary-rgb), 0.14);
-  }
+  --background: rgba(var(--store-color), 0.14);
+}
   
-  ion-menu.md ion-item.active ion-icon {
-    color: var(--ion-color-primary);
-  }
+ion-menu.md ion-item.active, ion-menu.md ion-item.active ion-icon {
+  color: rgb(var(--store-color));
+}

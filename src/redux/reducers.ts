@@ -3,7 +3,7 @@ const initialState = {
   stores: [
     {
       name: 'Default',
-      color: '#D32F2F',
+      color: '211, 47, 47',
       entries: [] as Array<{
         name: string;
         done: boolean;

@@ -71,7 +71,7 @@ const StorePage: React.FC<Props> = (props: Props) => {
     height: '100%',
     display: 'flex',
     alignItems: 'flex-start',
-    background: color,
+    background: `rgb(${color})`,
   });
 
   return (
