@@ -1,0 +1,8 @@
+{
+  "appId": "es.blueignis.shoppinglist",
+  "appName": "Shopping List",
+  "bundledWebRuntime": false,
+  "npmClient": "npm",
+  "webDir": "build",
+  "cordova": {}
+}
