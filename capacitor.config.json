@@ -1,6 +1,6 @@
 {
-  "appId": "io.ionic.starter",
-  "appName": "ionicTest",
+  "appId": "es.blueignis.shoppinglist",
+  "appName": "Shopping List",
   "bundledWebRuntime": false,
   "npmClient": "npm",
   "webDir": "build",
