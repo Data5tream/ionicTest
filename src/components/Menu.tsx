@@ -1,5 +1,7 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
+import { Plugins } from '@capacitor/core';
+import { BackButtonEvent } from '@ionic/core';
 import { IonContent, IonHeader, IonTitle, IonToolbar, IonMenu, IonMenuToggle, IonList, IonItem, IonIcon, IonLabel } from '@ionic/react';
 import { pricetag, settingsSharp } from 'ionicons/icons';
 
@@ -14,8 +16,31 @@ interface MenuProps {
 
 const Menu: React.FC<MenuProps> = ({ stores }) => {
   const loc = useLocation();
+  const fck: Array<any> = [];
+  const  [myHistory, setMyHistory] = useState(fck);
+
+  useEffect(() => {
+    const lastHistoryIndex = myHistory.length - 1;
+    const previousLocationKey = myHistory[lastHistoryIndex - 1];
+    const isBack = previousLocationKey === loc.key;
+    if (isBack) {
+      const arr = myHistory.slice();
+      arr.pop();
+      setMyHistory(arr);
+    } else {
+      setMyHistory([...myHistory, loc.key]);
+    }
+  }, [loc]);
 
   const checkRoute = (route: string): string => loc.pathname === route ? 'active' : '';
+
+  document.addEventListener('ionBackButton', ((ev: BackButtonEvent) => {
+    ev.detail.register(-1, () => {
+      if (myHistory.length <= 1) {
+        Plugins.App.exitApp();
+      }
+    });
+  }) as EventListener);
 
   return (
     <IonMenu contentId="main" side="start">
